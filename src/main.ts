@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { attachSwaggerDocumentation } from './documentation/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +17,8 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+
+  attachSwaggerDocumentation(app);
 
   await app.listen(3000);
 }
