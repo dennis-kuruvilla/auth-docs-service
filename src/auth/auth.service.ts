@@ -22,7 +22,7 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     console.log('inside register');
-    const { email, password, roles } = registerDto;
+    const { email, password } = registerDto;
 
     const existingUser = await this.userRepository.findOneBy({ email });
     if (existingUser) throw new HttpException('User already exists', 400);
@@ -31,7 +31,7 @@ export class AuthService {
     user.email = email;
     user.password = password;
 
-    user.roles = await this.roleRepository.findBy({ name: In(roles) });
+    user.roles = await this.roleRepository.findBy({ name: 'viewer' });
 
     return this.userRepository.save(user);
   }

@@ -16,13 +16,6 @@ export class RegisterDto {
   @IsString()
   @MaxLength(100)
   password: string;
-
-  @IsDefined()
-  @IsArray()
-  @ArrayNotEmpty()
-  @IsString({ each: true })
-  @IsIn(['editor', 'viewer'], { each: true })
-  roles: string[];
 }
 
 export class LoginDto {
