@@ -8,10 +8,11 @@ import { JwtStrategy } from './jwt.strategy';
 import { User } from 'src/user/user.entity';
 import { Role } from 'src/user/role.entity';
 import { getEnvOrThrow } from 'src/common/utils/env';
+import { Session } from './session.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Role]),
+    TypeOrmModule.forFeature([User, Role, Session]),
     PassportModule,
     JwtModule.register({
       secret: getEnvOrThrow('JWT_SECRET'),
