@@ -1,0 +1,46 @@
+version: '3.7'
+
+services:
+  auth-docs:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: auth-docs
+    command: npm run start:dev
+    ports:
+      - 3000:3000
+    env_file: .env
+    volumes:
+      - ./:/app
+    depends_on:
+      - postgres-auth-docs
+    environment:
+      - npm_config_cache=/home/node/.npm
+
+  postgres-auth-docs:
+    image: postgis/postgis:15-3.4
+    environment:
+      - POSTGRES_USER=dev
+      - POSTGRES_PASSWORD=dev
+      - POSTGRES_DB=auth-docs-db
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: always
+
+  pgadmin-auth-docs:
+    image: dpage/pgadmin4:7.5
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=dev@dev.com
+      - PGADMIN_DEFAULT_PASSWORD=dev
+      - PGADMIN_LISTEN_PORT=5050
+    ports:
+      - 5050:5050
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    restart: always
+
+volumes:
+  postgres-data:
+  pgadmin-data:
