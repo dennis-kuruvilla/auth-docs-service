@@ -21,7 +21,6 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto) {
-    console.log('inside register');
     const { email, password } = registerDto;
 
     const existingUser = await this.userRepository.findOneBy({ email });
@@ -38,7 +37,10 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
-    const user = await this.userRepository.findOneBy({ email });
+    const user = await this.userRepository.findOne({
+      where: { email },
+      select: ['id','roles','password'],
+    });
 
     if (!user || !(await user.validatePassword(password))) {
       throw new UnauthorizedException('Invalid credentials');

@@ -21,6 +21,7 @@ export class User {
     type: 'bytea',
     transformer: defaultEncryptTransformer,
     nullable: true,
+    select: false,
   })
   password: string | null;
 
