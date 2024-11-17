@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -8,8 +9,11 @@ import {
   Post,
   Query,
   Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
@@ -53,8 +57,37 @@ export class DocumentController {
   }
 
   @Delete(':id')
-  @Roles('admin')
+  @Roles('admin', 'editor')
   async remove(@Req() req: any, @Param('id') id: string) {
     return this.documentService.remove(id);
+  }
+
+  @Post(':id/upload')
+  @Roles('admin', 'editor')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadDocument(
+    @Req() req: any,
+    @Param('id') documentId: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Body('fileSize') fileSize: number,
+    @Body('mimeType') mimeType: string,
+  ) {
+    if (!file) {
+      throw new BadRequestException('File is required for upload');
+    }
+
+    return this.documentService.uploadDocument(
+      documentId,
+      file,
+      fileSize,
+      mimeType,
+      req.user,
+    );
+  }
+
+  @Post(':id/publish')
+  @Roles('admin', 'editor')
+  async publishDocument(@Param('id') documentId: string) {
+    return this.documentService.publishDocument(documentId);
   }
 }

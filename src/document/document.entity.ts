@@ -31,8 +31,8 @@ export class Document {
   @Column({ type: 'text', nullable: true })
   description: string;
 
-  @Column({ type: 'varchar', length: 500 })
-  fileUrl: string;
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  fileUrl?: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   mimeType?: string;
@@ -89,17 +89,6 @@ export class CreateDocumentDto {
   @IsOptional()
   description?: string;
 
-  @IsUrl()
-  fileUrl: string;
-
-  @IsString()
-  @IsOptional()
-  mimeType?: string;
-
-  @IsNumber()
-  @IsOptional()
-  fileSize?: number;
-
   @IsString()
   @IsOptional()
   version?: string;
@@ -113,18 +102,6 @@ export class UpdateDocumentDto {
   @IsString()
   @IsOptional()
   description?: string;
-
-  @IsUrl()
-  @IsOptional()
-  fileUrl?: string;
-
-  @IsString()
-  @IsOptional()
-  mimeType?: string;
-
-  @IsNumber()
-  @IsOptional()
-  fileSize?: number;
 
   @IsString()
   @IsOptional()

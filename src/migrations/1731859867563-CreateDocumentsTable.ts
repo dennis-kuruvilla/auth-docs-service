@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CreateDocumentsTable1731848961077 implements MigrationInterface {
-  name = 'CreateDocumentsTable1731848961077';
+export class CreateDocumentsTable1731859867563 implements MigrationInterface {
+  name = 'CreateDocumentsTable1731859867563';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
@@ -12,7 +12,7 @@ export class CreateDocumentsTable1731848961077 implements MigrationInterface {
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "title" character varying(255) NOT NULL,
                 "description" text,
-                "fileUrl" character varying(500) NOT NULL,
+                "fileUrl" character varying(500),
                 "mimeType" character varying(100),
                 "fileSize" bigint,
                 "status" "public"."documents_status_enum" NOT NULL DEFAULT 'DRAFT',
