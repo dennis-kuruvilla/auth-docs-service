@@ -11,4 +11,7 @@ export const DefaultDataSource = new DataSource({
   database: getEnvOrThrow('DB_NAME'),
   migrations: [__dirname + '/../migrations/*{.ts,.js}'],
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
