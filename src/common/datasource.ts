@@ -5,7 +5,7 @@ import { getEnvOrDefault, getEnvOrThrow } from './utils/env';
 const ssl =
   getEnvOrDefault('APP_ENV', 'dev') === 'qa'
     ? {
-        rejectUnauthorized: true,
+        rejectUnauthorized: false,
       }
     : undefined;
 
