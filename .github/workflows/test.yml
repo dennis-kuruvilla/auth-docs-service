@@ -21,9 +21,21 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Install dependencies
-      run: npm install
+    - name: Save npm cache
+      id: auth-docs-cache
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: auth-docs-test-cache-npm-${{ hashFiles('package-lock.json') }}
 
+    - name: npm ci
+      if: steps.auth-docs-cache.outputs.cache-hit != 'true'
+      run: |
+        npm ci
+
+    - name: Copy .env
+        run: cp .env.example .env
+        
     - name: Run Unit Tests
       run: npm run test
 
