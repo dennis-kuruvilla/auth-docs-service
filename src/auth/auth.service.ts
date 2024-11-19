@@ -4,8 +4,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Role } from 'src/user/role.entity';
-import { User } from 'src/user/user.entity';
+import { Role } from '../user/role.entity';
+import { User } from '../user/user.entity';
 import { In, Repository } from 'typeorm';
 import { LoginDto, RegisterDto } from './auth.entity';
 import { JwtService } from '@nestjs/jwt';

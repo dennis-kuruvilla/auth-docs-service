@@ -9,8 +9,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getEnvOrThrow } from 'src/common/utils/env';
-import { User } from 'src/user/user.entity';
+import { getEnvOrThrow } from '../common/utils/env';
+import { User } from '../user/user.entity';
 import { Repository } from 'typeorm';
 import {
   CreateDocumentDto,

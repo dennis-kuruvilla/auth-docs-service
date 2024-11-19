@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { getEnvOrDefault } from 'src/common/utils/env';
+import { getEnvOrDefault } from '../common/utils/env';
 
 export function attachSwaggerDocumentation(app) {
   const config = new DocumentBuilder()
