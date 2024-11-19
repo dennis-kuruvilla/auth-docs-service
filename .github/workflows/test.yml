@@ -32,11 +32,65 @@ jobs:
       run: |
         npm ci
 
+    - name: Bring up postgres
+      timeout-minutes: 2
+      run: |
+        docker run -d --name postgres \
+          -p 5432:5432 \
+          -e POSTGRES_USER=dev \
+          -e POSTGRES_PASSWORD=dev \
+          -e POSTGRES_DB=auth-docs-db \
+          postgis/postgis:15-3.4
+        # Wait for postgres to be ready
+        until docker exec postgres pg_isready; do
+          sleep 1
+        done
+
     - name: Copy .env
       run: cp .env.example .env
 
-    - name: Run Unit Tests
-      run: npm run test
+    - name: Run migrations
+      env:
+        DB_HOST: localhost
+        DB_PORT: 5432
+        DB_USERNAME: dev
+        DB_PASSWORD: dev
+        DB_NAME: auth-docs-db
+      run: |
+        set -euxo pipefail
+        npm run typeorm migration:run -- -d src/common/datasource.ts
+
+    - name: Verify there are no uncommitted migrations
+      env:
+        DB_HOST: localhost
+        DB_PORT: 5432
+        DB_USERNAME: dev
+        DB_PASSWORD: dev
+        DB_NAME: auth-docs-db
+      run: |
+        set -euxo pipefail
+        npm run typeorm migration:generate -- -p -d src/common/datasource.ts src/migrations/CIMigration --check
+
+    - name: Run Tests
+      env:
+        DB_TYPE: postgres
+        DB_HOST: localhost
+        DB_PORT: 5432
+        DB_USERNAME: dev
+        DB_PASSWORD: dev
+        DB_NAME: auth-docs-db
+      run: |
+        set -euxo pipefail
+        npm run test
 
     - name: Run E2E Tests
-      run: npm run test:e2e
+      env:
+        DB_TYPE: postgres
+        DB_HOST: localhost
+        DB_PORT: 5432
+        DB_USERNAME: dev
+        DB_PASSWORD: dev
+        DB_NAME: auth-docs-db
+      run: |
+        set -euxo pipefail
+        npm run test:e2e
