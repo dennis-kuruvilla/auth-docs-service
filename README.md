@@ -52,14 +52,14 @@ For Docker
 cp .env.example .env.docker
 ```
 Without Docker 
-For Docker
+
 ```bash
 cp .env.example .env
 ```
 Fill in the required values, especially database credentials and AWS settings if using AWS services. The service will still start without AWS-specific values.
 
 ### 3. Running the Service
-####Option 1: Using Docker (Recommended)
+**Option 1:** Using Docker (Recommended)
 Run the service, PostgreSQL, and PgAdmin using Docker Compose:
 ```bash
 docker-compose up
@@ -70,7 +70,7 @@ This will start three containers:
 - A PostgreSQL instance
 - PgAdmin for database management
 
-####Option 2: Running Locally
+**Option 2:** Running Locally
 If you have your own PostgreSQL instance running:
 ```bash
 npm run start:dev
