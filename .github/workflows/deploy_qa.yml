@@ -1,0 +1,17 @@
+name: deploy_qa
+
+on:
+  push:
+    branches:
+      - qa
+  workflow_call:
+
+jobs:
+  test:
+    name: Run Tests
+    uses: ./.github/workflows/test.yml
+
+  deploy:
+    name: Deploy to QA
+    needs: test
+    uses: ./.github/workflows/deploy.yml
