@@ -17,12 +17,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload) {
     const { sub, roles } = payload;
 
-    const session = await this.authService.validateSession(
-      sub,
-      payload.accessToken,
-    );
-    if (!session) {
-      throw new UnauthorizedException('Session is invalid or expired');
+    try {
+      const session = await this.authService.validateSession(
+        sub,
+        payload.accessToken,
+      );
+      if (!session) {
+        throw new UnauthorizedException('Session is invalid or expired');
+      }
+    } catch (error) {
+      throw new UnauthorizedException(error.message || 'Unauthorized');
     }
 
     return { userId: sub, roles: roles };
