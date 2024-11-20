@@ -1,73 +1,97 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Auth-Docs Service
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Overview
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This service is a **NestJS**-based backend application designed to handle key functionalities such as user authentication, user management and document management.
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Key Features
 
-## Installation
+### Authentication APIs
+- User registration, login, and logout.
+- Role-based access control: supports roles like `admin`, `editor`, and `viewer`.
 
+### User Management APIs
+- **Admin-only** functionality for managing user roles and permissions.
+
+### Document Management APIs
+- Perform CRUD operations on documents.
+- Upload documents for processing.
+
+---
+
+## Tools and Libraries
+
+- **TypeScript**: Ensures consistent type management.
+- **PostgreSQL**: Database integration.
+- **JWT**: Used for user authentication and role-based authorization.
+- **Docker Compose**: Facilitates containerized deployments.
+- **Microservices Architecture**: Enables seamless interaction between NestJS and the Python backend.
+
+---
+
+## Prerequisites
+
+Before running the application, ensure you have the following installed:
+- **Node.js** (v16+ recommended)
+- **Docker** and **Docker Compose** (if running in a containerized environment)
+- **PostgreSQL** (if running without Docker)
+
+---
+
+## Getting Started
+
+### 1. Install Dependencies
 ```bash
-$ npm install
+npm install
 ```
 
-## Running the app
-
+### 2. Set Up Environment Variables
+For Docker
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+cp .env.example .env.docker
 ```
-
-## Test
-
+Without Docker 
+For Docker
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+cp .env.example .env
 ```
+Fill in the required values, especially database credentials and AWS settings if using AWS services. The service will still start without AWS-specific values.
 
-## Support
+### 3. Running the Service
+####Option 1: Using Docker (Recommended)
+Run the service, PostgreSQL, and PgAdmin using Docker Compose:
+```bash
+docker-compose up
+```
+This will start three containers:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- The Auth-Docs backend service
+- A PostgreSQL instance
+- PgAdmin for database management
 
-## Stay in touch
+####Option 2: Running Locally
+If you have your own PostgreSQL instance running:
+```bash
+npm run start:dev
+```
+Ensure the .env file has correct database credentials.
+### 4. Run Migration
+```bash
+npm run typeorm migration:run -- -d src/common/datasource.ts
+```
+## Testing
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+Unit Tests
+```bash
+docker-compose up
+```
+End-to-End Tests
+```bash
+npm run test:e2e
+```
+Test Coverage
+```bash
+npm run test:cov
+```
