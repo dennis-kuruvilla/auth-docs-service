@@ -5,7 +5,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to Server
+    name: Deploy Application
     runs-on: ubuntu-latest
 
     steps:
@@ -17,32 +17,30 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: SSH to EC2 and deploy the service
+    - name: Deploy to EC2 Instance
       run: |
         ssh -o StrictHostKeyChecking=no ec2-user@ec2-13-126-190-26.ap-south-1.compute.amazonaws.com << 'EOF'
-          screen -r
-
-          # Stop the running service
-          kill $(ps aux | grep 'npm run start:prod' | awk '{print $1}')
+          # Navigate to the project directory
+          cd auth-docs-service
 
           # Ensure we're on the correct branch
           git checkout qa
           
-          # Fetch the latest QA branch
+          # Fetch the latest changes
           git pull origin qa
 
           # Install dependencies
           npm install
 
-          # Run migrations
+          # Run migrations (if needed)
           npm run typeorm migration:run -- -d src/common/datasource.ts
 
-          # Run build
+          # Build the application
           npm run build
 
-          # Start the service
-          npm run start:prod
+          # Kill the existing PM2 process (if any)
+          pm2 delete auth-docs-service || true
 
-          # Detach from the screen
-          Ctrl+A D
+          # Start the application with PM2
+          pm2 start npm --name "auth-docs-service" -- run start:prod
         EOF
