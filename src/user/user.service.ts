@@ -69,8 +69,18 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
-  async getAllUsers(): Promise<User[]> {
-    return this.userRepository.find({ relations: ['roles'] });
+  async getAllUsers(search?: string): Promise<User[]> {
+    const query = this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.roles', 'roles');
+
+    if (search) {
+      query.where('LOWER(user.email) LIKE :search', {
+        search: `%${search.toLowerCase()}%`,
+      });
+    }
+
+    return query.getMany();
   }
 
   async getUserById(userId: string): Promise<User> {

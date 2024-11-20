@@ -7,7 +7,14 @@ export function attachSwaggerDocumentation(app) {
     .setTitle('Auth-Docs Service API')
     .setDescription('Auth-Docs Service API Documentation')
     .setVersion('1.0')
-    .addBearerAuth()
+    .addBearerAuth({
+      description: `Please enter the JWT token`,
+      name: 'Authorization',
+      bearerFormat: 'Bearer',
+      scheme: 'Bearer',
+      type: 'http',
+      in: 'Header',
+    })
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup(

@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { ArrayNotEmpty, IsArray, IsIn, IsString } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
@@ -11,6 +12,11 @@ export class Role {
 }
 
 export class AssignRolesDto {
+  @ApiProperty({
+    type: String,
+    isArray: true,
+    example: ['admin', 'editor'],
+  })
   @IsArray()
   @ArrayNotEmpty()
   @IsString({ each: true })

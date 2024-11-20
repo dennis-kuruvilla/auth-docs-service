@@ -218,16 +218,58 @@ describe('UserService', () => {
   });
 
   describe('getAllUsers', () => {
-    it('should return all users successfully', async () => {
+    let createQueryBuilderMock: any;
+
+    beforeEach(() => {
+      createQueryBuilderMock = {
+        leftJoinAndSelect: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        getMany: jest.fn(),
+      };
+
+      jest
+        .spyOn(userRepository, 'createQueryBuilder')
+        .mockReturnValue(createQueryBuilderMock);
+    });
+
+    it('should return all users without search', async () => {
       const mockUsers = [{ id: 'user-id', roles: ['admin'] }];
-      jest.spyOn(userRepository, 'find').mockResolvedValue(mockUsers as any);
+      createQueryBuilderMock.getMany.mockResolvedValue(mockUsers);
 
       const result = await userService.getAllUsers();
 
       expect(result).toEqual(mockUsers);
-      expect(userRepository.find).toHaveBeenCalledWith({
-        relations: ['roles'],
-      });
+      expect(userRepository.createQueryBuilder).toHaveBeenCalledWith('user');
+      expect(createQueryBuilderMock.leftJoinAndSelect).toHaveBeenCalledWith(
+        'user.roles',
+        'roles',
+      );
+      expect(createQueryBuilderMock.where).not.toHaveBeenCalled();
+      expect(createQueryBuilderMock.getMany).toHaveBeenCalled();
+    });
+
+    it('should return filtered users with search', async () => {
+      const mockUsers = [
+        { id: 'user-id', roles: ['admin'], email: 'example@test.com' },
+      ];
+      createQueryBuilderMock.getMany.mockResolvedValue(mockUsers);
+
+      const searchQuery = 'example';
+      const result = await userService.getAllUsers(searchQuery);
+
+      expect(result).toEqual(mockUsers);
+      expect(userRepository.createQueryBuilder).toHaveBeenCalledWith('user');
+      expect(createQueryBuilderMock.leftJoinAndSelect).toHaveBeenCalledWith(
+        'user.roles',
+        'roles',
+      );
+      expect(createQueryBuilderMock.where).toHaveBeenCalledWith(
+        'LOWER(user.email) LIKE :search',
+        {
+          search: `%${searchQuery.toLowerCase()}%`,
+        },
+      );
+      expect(createQueryBuilderMock.getMany).toHaveBeenCalled();
     });
   });
 
