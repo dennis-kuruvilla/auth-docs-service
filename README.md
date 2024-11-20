@@ -84,7 +84,7 @@ npm run typeorm migration:run -- -d src/common/datasource.ts
 
 Unit Tests
 ```bash
-docker-compose up
+npm run test
 ```
 End-to-End Tests
 ```bash
