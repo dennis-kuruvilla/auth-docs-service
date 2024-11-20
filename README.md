@@ -27,14 +27,13 @@ This service is a **NestJS**-based backend application designed to handle key fu
 - **PostgreSQL**: Database integration.
 - **JWT**: Used for user authentication and role-based authorization.
 - **Docker Compose**: Facilitates containerized deployments.
-- **Microservices Architecture**: Enables seamless interaction between NestJS and the Python backend.
 
 ---
 
 ## Prerequisites
 
 Before running the application, ensure you have the following installed:
-- **Node.js** (v16+ recommended)
+- **Node.js** (v18+ recommended)
 - **Docker** and **Docker Compose** (if running in a containerized environment)
 - **PostgreSQL** (if running without Docker)
 
